@@ -3,16 +3,16 @@ using TuringConfig.Models;
 
 namespace TuringConfig
 {
-    public class Config
+    public class ConfigCreator
     {
-        private readonly TuringConfigSettings settings;
+        private readonly GenerationSettings settings;
 
         /// <summary>
         /// Use default settings.
         /// </summary>
-        public Config()
+        public ConfigCreator()
         {
-            settings = new TuringConfigSettings
+            settings = new GenerationSettings
             {
                 OutputDirectory = null,
                 OutputFileName = null,
@@ -28,9 +28,9 @@ namespace TuringConfig
         /// <param name="outputFileName">The name of the with (no extension) to be written.</param>
         /// <param name="formatJsonOutput">Whether the JSON should be indented when written.</param>
         /// <param name="overwrite">Whether the file should be overwritten if it already exists.</param>
-        public Config(string outputDirectory, string outputFileName, bool formatJsonOutput, bool overwrite)
+        public ConfigCreator(string outputDirectory, string outputFileName, bool formatJsonOutput, bool overwrite)
         {
-            settings = new TuringConfigSettings
+            settings = new GenerationSettings
             {
                 OutputDirectory = outputDirectory,
                 OutputFileName = outputFileName,
@@ -44,10 +44,9 @@ namespace TuringConfig
         /// </summary>
         /// <param name="objectToBuild">The object to serialise and output in JSON.</param>
         /// <returns>Details of the generation.</returns>
-        public ConfigGenerationResult CreateBlankConfigFile(object objectToBuild)
+        public GenerationResult Create(object objectToBuild)
         {
             return GenerateFile.Generate(objectToBuild, settings.OutputDirectory, settings.OutputFileName, settings.FormatJsonOutput, settings.Overwrite);
         }
-
     }
 }

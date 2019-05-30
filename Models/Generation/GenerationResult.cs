@@ -1,6 +1,6 @@
 ﻿namespace TuringConfig.Models
 {
-    public class ConfigGenerationResult
+    public class GenerationResult
     {
         public string FilePath { get; set; }
         public string Reason { get; set; }

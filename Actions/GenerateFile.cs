@@ -17,9 +17,9 @@ namespace TuringConfig.Actions
         /// <param name="formatted">Whether the JSON should be written formatted.</param>
         /// <param name="overwrite">Whether the file should be overwritten if it already exists.</param>
         /// <returns>Details of the generation.</returns>
-        internal static ConfigGenerationResult Generate(object target, string outputPath, string outputFileName, bool formatted, bool overwrite)
+        internal static GenerationResult Generate(object target, string outputPath, string outputFileName, bool formatted, bool overwrite)
         {
-            ConfigGenerationResult result = new ConfigGenerationResult
+            GenerationResult result = new GenerationResult
             {
                 Success = false,
                 OverwritePerformed = false

@@ -1,6 +1,6 @@
 ﻿namespace TuringConfig.Models
 {
-    internal class TuringConfigSettings
+    internal class GenerationSettings
     {
         public string OutputDirectory { get; set; }
         public string OutputFileName { get; set; }
