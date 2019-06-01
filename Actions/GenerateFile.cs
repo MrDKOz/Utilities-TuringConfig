@@ -17,9 +17,9 @@ namespace TuringConfig.Actions
         /// <param name="formatted">Whether the JSON should be written formatted.</param>
         /// <param name="overwrite">Whether the file should be overwritten if it already exists.</param>
         /// <returns>Details of the generation.</returns>
-        internal static GenerationResult Generate(object target, string outputPath, string outputFileName, bool formatted, bool overwrite)
+        internal static bool Generate(object target, string outputPath, string outputFileName, bool formatted, bool overwrite, out GenerationResult generationResult)
         {
-            GenerationResult result = new GenerationResult
+            generationResult = new GenerationResult
             {
                 Success = false,
                 OverwritePerformed = false
@@ -28,12 +28,13 @@ namespace TuringConfig.Actions
             try
             {
                 // If no name was defined, use the name of class.
-                string filename = outputFileName ?? target.GetType().Name;
-                filename = $"{filename}.json";
-                
+                string filename = Path.GetFileNameWithoutExtension(outputFileName ?? target.GetType().Name);
+
                 // If no output directory was defined, then use the current directory.
                 string directory = outputPath ?? Globals.BaseDirectory;
-                string filePath = Path.Combine(directory, filename);
+                string filePath = Path.Combine(directory, $"{filename}.json");
+
+                generationResult.FilePath = filePath;
 
                 string json = JsonConvert.SerializeObject(
                     target,
@@ -44,32 +45,31 @@ namespace TuringConfig.Actions
 
                 if (overwrite)
                 {  // Overwrite is true, so just do it.
-                    result.OverwritePerformed = File.Exists(filePath);
+                    generationResult.OverwritePerformed = File.Exists(filePath);
 
-                    result.Success = WriteFile(filePath, json);
+                    generationResult.Success = WriteFile(filePath, json);
                 }
                 else if (File.Exists(filePath))
                 { // Overwrite is false, and file exists so we don't attempt.
-                    result.Reason = $"Failure. '{filePath}' already exists, and parameter 'Overwrite' is false.";
+                    generationResult.Message = $"Failure. File already exists, and parameter 'Overwrite' is false.";
                 }
                 else
                 { // Overwrite is false, and the file doesn't exist, so write config.
-                    result.Success = WriteFile(filePath, json);
+                    generationResult.Success = WriteFile(filePath, json);
                 }
 
-                if (result.Success)
+                if (generationResult.Success)
                 {
-                    result.FilePath = filePath;
-                    result.Reason = $"Success. File successfully written.";
+                    generationResult.Message = $"Success. File successfully written.";
                 }
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.Reason = ex.Message;
+                generationResult.Success = false;
+                generationResult.Message = ex.Message;
             }
 
-            return result;
+            return generationResult.Success;
         }
 
         /// <summary>

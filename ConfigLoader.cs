@@ -6,7 +6,9 @@ namespace TuringConfig
 {
     public class ConfigLoader
     {
-        private readonly LoadSettings _loadSettings = new LoadSettings();
+        private readonly LoadSettings _loadSettings;
+
+        public LoadResult Details;
 
         /// <summary>
         /// Initialise the config loader with default values.
@@ -16,6 +18,11 @@ namespace TuringConfig
             _loadSettings = new LoadSettings
             {
                 ConfigDirectory = Globals.BaseDirectory
+            };
+
+            Details = new LoadResult
+            {
+                Message = "No load attempt has been attempted yet."
             };
         }
 
@@ -29,6 +36,11 @@ namespace TuringConfig
             {
                 ConfigDirectory = configDirectory
             };
+
+            Details = new LoadResult
+            {
+                Message = "No load attempt has been attempted yet."
+            };
         }
 
         /// <summary>
@@ -39,7 +51,11 @@ namespace TuringConfig
         /// <returns>A populated class from the JSON file.</returns>
         public T Load<T>(string name)
         {
-            return LoadFile.FindAndLoad<T>(_loadSettings, name);
+            T result = LoadFile.FindAndLoad<T>(_loadSettings, out LoadResult loadResult, name);
+
+            Details = loadResult;
+
+            return result;
         }
 
         /// <summary>
@@ -49,7 +65,11 @@ namespace TuringConfig
         /// <returns>A populated class from the JSON file.</returns>
         public T Load<T>()
         {
-            return LoadFile.FindAndLoad<T>(_loadSettings, null);
+            T result = LoadFile.FindAndLoad<T>(_loadSettings, out LoadResult loadResult, null);
+
+            Details = loadResult;
+
+            return result;
         }
     }
 }

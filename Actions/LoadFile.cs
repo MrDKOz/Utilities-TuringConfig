@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using TuringConfig.Models.Loading;
 
 namespace TuringConfig.Actions
@@ -13,20 +15,41 @@ namespace TuringConfig.Actions
         /// <param name="loadSettings">The configuration settings to obey.</param>
         /// <param name="name">The name of the file to look for.</param>
         /// <returns>A populated class.</returns>
-        internal static T FindAndLoad<T>(LoadSettings loadSettings, string name = null)
+        internal static T FindAndLoad<T>(LoadSettings loadSettings, out LoadResult loadResult, string name = null)
         {
-            string fileName = name ?? typeof(T).Name;
+            T result = default;
+
+            string fileName = Path.GetFileNameWithoutExtension(name ?? typeof(T).Name);
             string filePath = Path.Combine(loadSettings.ConfigDirectory, $"{fileName}.json");
+
+            loadResult = new LoadResult
+            {
+                Success = false,
+                FilePath = filePath
+            };
 
             if (File.Exists(filePath))
             {
-                string fileContents = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<T>(fileContents);
+                try
+                {
+                    string fileContents = File.ReadAllText(filePath);
+
+                    loadResult.Success = true;
+                    loadResult.Message = "Successfully loaded config from JSON file.";
+
+                    result = JsonConvert.DeserializeObject<T>(fileContents);
+                }
+                catch (Exception ex)
+                {
+                    loadResult.Message = $"File found, however there was an error de-serialising. Error: {ex.Message}";
+                }
             }
             else
             {
-                throw new FileNotFoundException($"Requested file '{filePath}' does not exist.");
+                loadResult.Message = $"Could not find file using name of '{fileName}'";
             }
+
+            return result;
         }
     }
 }

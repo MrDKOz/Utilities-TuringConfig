@@ -7,6 +7,8 @@ namespace TuringConfig
     {
         private readonly GenerationSettings settings;
 
+        public GenerationResult Details;
+
         /// <summary>
         /// Use default settings.
         /// </summary>
@@ -18,6 +20,11 @@ namespace TuringConfig
                 OutputFileName = null,
                 FormatJsonOutput = true,
                 Overwrite = true
+            };
+
+            Details = new GenerationResult
+            {
+                Message = "No creation attempt has been made."
             };
         }
 
@@ -37,6 +44,11 @@ namespace TuringConfig
                 FormatJsonOutput = formatJsonOutput,
                 Overwrite = overwrite
             };
+
+            Details = new GenerationResult
+            {
+                Message = "No creation attempt has been made."
+            };
         }
 
         /// <summary>
@@ -44,9 +56,13 @@ namespace TuringConfig
         /// </summary>
         /// <param name="objectToBuild">The object to serialise and output in JSON.</param>
         /// <returns>Details of the generation.</returns>
-        public GenerationResult Create(object objectToBuild)
+        public bool Create(object objectToBuild)
         {
-            return GenerateFile.Generate(objectToBuild, settings.OutputDirectory, settings.OutputFileName, settings.FormatJsonOutput, settings.Overwrite);
+            bool result = GenerateFile.Generate(objectToBuild, settings.OutputDirectory, settings.OutputFileName, settings.FormatJsonOutput, settings.Overwrite, out GenerationResult generationResult);
+
+            Details = generationResult;
+
+            return result;
         }
     }
 }

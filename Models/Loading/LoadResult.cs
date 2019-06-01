@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TuringConfig.Models.Loading
+﻿namespace TuringConfig.Models.Loading
 {
-    class LoadResult
+    public class LoadResult
     {
+        public bool Success { get; set; }
+        public string FilePath { get; set; }
+        public string Message { get; set; }
     }
 }
