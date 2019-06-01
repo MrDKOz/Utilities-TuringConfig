@@ -6,11 +6,26 @@
     <Authors>Daniel Osborne</Authors>
     <Company>JD Turing</Company>
     <Product>Turing Config</Product>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
+    <Description>TuringConfig [TC] allows you to utilise your classes to create and load populated JSON configuration files.</Description>
+    <PackageProjectUrl>https://jdturing.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MrDTuring/TuringConfig</RepositoryUrl>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
+    <SignAssembly>false</SignAssembly>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
