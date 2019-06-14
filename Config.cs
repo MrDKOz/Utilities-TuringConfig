@@ -1,4 +1,6 @@
-﻿using TuringConfig.Actions;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using TuringConfig.Actions;
 using TuringConfig.Internal;
 using TuringConfig.Models.Loading;
 using TuringConfig.Models.Saving;
@@ -76,7 +78,7 @@ namespace TuringConfig
         /// Object to save.
         /// </summary>
         /// <param name="objectToSave"></param>
-        /// <returns></returns>
+        /// <returns>True/False as to whether it was possible to save.</returns>
         public bool Save(object objectToSave)
         {
             bool success = SaveFile.Save(objectToSave, _fileSettings, out SaveResult saveResult);
@@ -84,6 +86,20 @@ namespace TuringConfig
             SaveDetails = saveResult;
 
             return success;
+        }
+
+        /// <summary>
+        /// Validate the given object using the data annotations against the class.
+        /// </summary>
+        /// <param name="objectToValidate">The populated object to validate.</param>
+        /// <param name="validationResults">Any results of the validation that caused a failure.</param>
+        /// <returns>True/False as to whether the object meets the requirements.</returns>
+        public bool Validate(object objectToValidate, out List<ValidationResult> validationResults)
+        {
+            ValidationContext context = new ValidationContext(objectToValidate);
+            validationResults = new List<ValidationResult>();
+
+            return Validator.TryValidateObject(objectToValidate, context, validationResults, true);
         }
     }
 }
