@@ -9,7 +9,7 @@ The project is in a very early alpha stage currently, but can be downloaded form
 The following code will generate a file in the same directory as your executable with the name "ExampleConfig.json" and populate it using properties from within your class using default values, the JSON written in this example will be formatted:
 
     // Instantiate TuringConfig
-    public Config taskConfig = new Config();
+    public Config myTestConfig = new Config();
     
     // Use Turing config to create and populate your class 'ExampleConfig'
     public ExampleConfig settings = myTestConfig.Load<ExampleConfig>();
